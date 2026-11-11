@@ -1,24 +1,142 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Momentum — Personal Execution System</title><style>
-:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#e8eef7;background:#0b1220}*{box-sizing:border-box}body{margin:0}main{max-width:1060px;margin:auto;padding:28px 18px 70px}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1{font-size:32px;margin:4px 0}h2{font-size:18px;margin:0 0 14px}p{color:#9cacc2;line-height:1.55}small,.muted{color:#94a3b8}.eyebrow{color:#82b5ff;font-size:12px;letter-spacing:2px;font-weight:700}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}.card{background:#131f31;border:1px solid #26374d;border-radius:16px;padding:20px;margin-top:16px}.hero{background:linear-gradient(135deg,#172d4a,#162b35)}input,textarea,select{width:100%;background:#0b1626;border:1px solid #35465c;border-radius:9px;padding:11px;color:#eef4ff;font:inherit;margin-top:7px}textarea{min-height:74px;resize:vertical}label{display:block;color:#c5d3e6;font-size:13px;margin-top:12px}button{border:0;border-radius:9px;background:#5e9cf6;color:#071325;font-weight:700;padding:10px 14px;cursor:pointer}button.secondary{background:#253750;color:#e5efff}button.danger{background:#523044;color:#ffd7e1}button:disabled{opacity:.45;cursor:default}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.checks label{display:flex;align-items:center;gap:10px;padding:11px;background:#0d192a;border-radius:9px;margin-top:8px;font-size:14px}.checks input{width:auto;margin:0;accent-color:#5e9cf6}.pill{border-radius:30px;padding:5px 10px;background:#254362;color:#b6d6ff;font-size:12px}.metric{font-size:34px;font-weight:800;color:#d5e6ff}.timer{font-variant-numeric:tabular-nums;font-size:54px;font-weight:750;text-align:center;padding:14px}.bars{display:flex;align-items:end;height:105px;gap:7px;margin-top:12px}.bar{flex:1;background:#5e9cf6;border-radius:5px 5px 0 0;min-height:3px;position:relative}.bar span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;color:#a4b2c6}.note{border-left:3px solid #5e9cf6;padding-left:12px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}.tabs button{background:#1b2b40;color:#cbd8eb}.tabs button.active{background:#5e9cf6;color:#061326}.page{display:none}.page.active{display:block}ul{line-height:1.75;color:#c5d3e6}a{color:#9fc6ff}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:18px 12px 60px}h1{font-size:26px}}
- .auth-panel{max-width:500px;margin:9vh auto;padding:28px;background:#131f31;border:1px solid #35465c;border-radius:18px}.auth-panel h1{margin:0 0 8px}.auth-panel input{margin:12px 0}.hidden{display:none!important}.sync{font-size:12px;color:#a4b2c6}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #80b3fa;outline-offset:2px}
-</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script></head><body><div id="auth" class="auth-panel"><div class="eyebrow">PRIVATE PERSONAL EXECUTION SYSTEM</div><h1>Momentum ↗</h1><p>Sign in to access your private, synced dashboard.</p><label>Your email address<input type="email" id="email" autocomplete="email" placeholder="you@example.com"></label><button id="signIn">Email me a sign-in link</button><p id="authMsg" role="status"></p><small>Only previously authorized accounts can sign in. Your records are protected by database access policies.</small></div><main id="app" class="hidden"><header><div><div class="eyebrow">PERSONAL EXECUTION SYSTEM</div><h1>Momentum <span style="color:#80b3fa">↗</span></h1><div class="muted" id="date"></div></div><div class="row"><span class="pill">Progress over pressure</span><span class="sync" id="syncStatus" role="status">Loading…</span><button class="secondary" id="signOut">Sign out</button></div></header><div class="tabs"><button class="active" data-tab="today">Today</button><button data-tab="review">Weekly review</button><button data-tab="guide">The framework</button><button data-tab="data">Backup</button></div>
-<section id="today" class="page active"><div class="card hero"><div class="row"><h2>Today's one important outcome</h2><span class="pill" id="status">Not started</span></div><textarea id="outcome" placeholder="An observable result, e.g. run one evaluation locally and inspect its output"></textarea><label>Definition of done (how will I prove it's finished?)<textarea id="definition" placeholder="e.g. command executed, results saved, explain the input → output path"></textarea></label></div><div class="grid"><div><div class="card"><h2>Daily execution checklist</h2><div class="checks" id="checks"></div><p>Start with a small action. Verify before expanding scope. No penalty for an imperfect day.</p></div><div class="card"><h2>Three outcomes, maximum</h2><label>Deliver — what must move forward?<input id="deliver" placeholder="Deliverable"></label><label>Understand — what must I learn or verify?<input id="understand" placeholder="Understanding goal"></label><label>Advance — one small future-oriented step<input id="advance" placeholder="Small step"></label></div><div class="card"><h2>End-of-day shutdown</h2><label>Evidence of progress<textarea id="evidence" placeholder="What actually ran, shipped, or was verified?"></textarea></label><label>Tomorrow's first physical action<input id="next" placeholder="Open terminal and run ..."></label><label>What can wait?<input id="wait" placeholder="Not a priority today"></label><div class="row" style="margin-top:14px"><button id="closeDay">Save today's review</button><span id="saved" class="muted"></span></div></div></div><div><div class="card"><h2>Focus session</h2><label>Session length<select id="duration"><option value="5">5-minute restart</option><option value="25">25 minutes</option><option value="60" selected>60 minutes</option><option value="90">90 minutes</option></select></label><div class="timer" id="clock">60:00</div><div class="row"><button id="start">Start</button><button class="secondary" id="pause">Pause</button><button class="secondary" id="reset">Reset</button></div><p id="timerMsg">Start with the next physical action, not the whole project.</p></div><div class="card"><h2>Today's progress</h2><div class="metric" id="progress">0 / 4</div><p>Checklist steps completed</p><div class="metric" id="focusCount">0</div><p>Focus minutes logged today</p></div><div class="card"><h2>When you feel stuck</h2><p class="note">Close the distraction. Name the next physical action. Work for five minutes. Then choose whether to continue.</p><button class="secondary" id="restart">Set a 5-minute restart</button></div></div></div></section>
-<section id="review" class="page"><div class="card"><h2>Weekly reflection</h2><p>Score the week based on evidence, not guilt. A low score is information, not a verdict.</p><div id="ratings"></div><label>What worked?<textarea id="worked"></textarea></label><label>What caused friction?<textarea id="friction"></textarea></label><label>One adjustment for next week<input id="adjustment"></label><button id="saveWeek" style="margin-top:15px">Save weekly review</button></div><div class="card"><h2>Last 7 days</h2><div class="row"><div><div class="metric" id="days">0</div><small>Days with saved reviews</small></div><div><div class="metric" id="minutes">0</div><small>Focus minutes logged</small></div></div><div class="bars" id="bars"></div><p id="weekSummary"></p></div></section>
-<section id="guide" class="page"><div class="card"><h2>Your operating rules</h2><ol><li><strong>Plan:</strong> Pick one measurable outcome, define done, then select up to two smaller priorities.</li><li><strong>Execute:</strong> Protect one focus block. When resistance appears, use the five-minute restart.</li><li><strong>Verify:</strong> Run, test, inspect and explain. With AI-assisted code, don't equate generated code with validated work.</li><li><strong>Close:</strong> Record evidence and tomorrow's first command or action.</li><li><strong>Recover:</strong> Time with family, exercise and rest are planned parts of the system, not rewards for overwork.</li></ol></div><div class="card"><h2>The 14-day rollout</h2><p><strong>Days 1–3:</strong> One outcome, one focus block, one shutdown note.<br><strong>Days 4–7:</strong> Repeat and notice friction.<br><strong>Days 8–14:</strong> Change one thing based on your weekly review. Don't redesign the entire system.</p></div><div class="card"><h2>Research foundations</h2><ul><li>Implementation intentions — Gollwitzer & Sheeran (2006): decide the cue and the response.</li><li>Goal-setting theory — Locke & Latham (2002): specific goals with feedback.</li><li>Procrastination as mood regulation — Sirois & Pychyl (2013): reduce the emotional cost of starting.</li><li>Practice testing — Dunlosky et al. (2013): retrieve and demonstrate understanding.</li><li>Habit formation — Lally et al. (2010): repetition in a consistent context.</li></ul><p>The app's timers, scoring and daily limits are practical design choices, not clinically validated interventions.</p></div></section>
-<section id="data" class="page"><div class="card"><h2>Your private cloud data</h2><p>Your entries are saved to your Supabase account and synchronized when you sign in on another device. The database enforces per-user access. Export a backup periodically. Do not enter confidential employer data.</p><div class="row"><button id="export">Export JSON backup</button><label style="margin:0"><span class="pill">Import backup</span><input type="file" id="import" accept="application/json" style="display:none"></label><button class="danger" id="clear">Erase my cloud data</button></div><p class="muted">Avoid entering confidential employer details if publishing or sharing screenshots. The site code is public. Your entries are saved in your private Supabase account after you sign in.</p></div></section></main><script>
-const KEY='momentum-pes-v1',today=()=>new Date().toLocaleDateString('en-CA'),weekKey=()=>{let d=new Date(),a=new Date(d.getFullYear(),d.getMonth(),d.getDate());a.setDate(a.getDate()-((a.getDay()+6)%7));return a.toLocaleDateString('en-CA')};let state={days:{},weeks:{}}, user=null, db=null, dirty=false, syncTimer=null, saving=false, saveRevision=0;
-const supabaseClient=window.supabase.createClient('https://ihtcxdlcgpqajrtodpqa.supabase.co','sb_publishable_safjAYnONMfTxZ5hk0gEaA_RAmxwK_A',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const syncStatus=document.getElementById('syncStatus');
-function markSync(t){syncStatus.textContent=t}
-async function flush(){if(!user||!dirty||saving)return;saving=true;clearTimeout(syncTimer);const revision=saveRevision;const snapshot=JSON.parse(JSON.stringify(state));markSync('Saving…');try{const {error}=await supabaseClient.from('momentum_data').upsert({user_id:user.id,payload:snapshot,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;if(revision===saveRevision){dirty=false;markSync('Synced ✓')}else{markSync('Syncing…')}}catch(err){markSync('Not synced — check connection');console.error('Sync error',err)}finally{saving=false;if(dirty)syncTimer=setTimeout(flush,1500)}}
-function save(){dirty=true;saveRevision++;markSync('Unsaved changes…');clearTimeout(syncTimer);syncTimer=setTimeout(flush,650)}
-async function startApp(session){user=session.user;document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');markSync('Loading…');const {data,error}=await supabaseClient.from('momentum_data').select('payload').eq('user_id',user.id).maybeSingle();if(error){document.getElementById('app').classList.add('hidden');document.getElementById('auth').classList.remove('hidden');document.getElementById('authMsg').textContent='Database unavailable: '+error.message+'. Complete the SQL setup before signing in.';return}state=data?.payload&&typeof data.payload==='object'?data.payload:{days:{},weeks:{}};state.days??={};state.weeks??={};refreshUI();markSync('Synced ✓')}
-async function boot(){if(!window.supabase){document.getElementById('authMsg').textContent='Could not load Supabase client. Check your internet connection.';return}const {data:{session}}=await supabaseClient.auth.getSession();if(session)await startApp(session);else document.getElementById('authMsg').textContent='Enter the email address authorized in Supabase.'}
-document.getElementById('signIn').onclick=async()=>{const email=document.getElementById('email').value.trim();if(!email){document.getElementById('authMsg').textContent='Enter your email address.';return}const btn=document.getElementById('signIn');btn.disabled=true;document.getElementById('authMsg').textContent='Sending…';const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:location.origin+location.pathname}});document.getElementById('authMsg').textContent=error?'Could not send link: '+error.message:'If this address is authorized, check your inbox for a sign-in link.';btn.disabled=false};
-document.getElementById('signOut').onclick=async()=>{if(dirty)await flush();if(dirty&&!confirm('Your latest changes may not be saved. Sign out anyway?'))return;await supabaseClient.auth.signOut();location.reload()};
-const fields=['outcome','definition','deliver','understand','advance','evidence','next','wait'],steps=['Choose one important outcome','Complete one protected focus block','Personally verify the result','Record tomorrow’s first action'];const day=()=>state.days[today()]??(state.days[today()]={checks:[false,false,false,false],focus:0});document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});for(const f of fields){const el=document.getElementById(f);el.value=day()[f]||'';el.addEventListener('input',()=>{day()[f]=el.value;save();update()})}function update(){const d=day(),n=(d.checks||[]).filter(Boolean).length;document.getElementById('progress').textContent=n+' / 4';document.getElementById('focusCount').textContent=d.focus||0;document.getElementById('status').textContent=n===4?'Completed':n?'In progress':'Not started'}function renderChecks(){document.getElementById('checks').innerHTML='';steps.forEach((s,i)=>{let label=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.checked=!!day().checks[i];cb.onchange=()=>{day().checks[i]=cb.checked;save();update()};label.append(cb,document.createTextNode(s));document.getElementById('checks').append(label)})}function refreshUI(){for(const f of fields)document.getElementById(f).value=day()[f]||'';renderChecks();update();renderRatings();renderWeek()}document.getElementById('closeDay').onclick=()=>{day().closed=true;save();document.getElementById('saved').textContent='Saved for today';renderWeek()};document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab==='review')renderWeek()});
-let remaining=3600,running=false,interval=null,endAt=0,sessionSeconds=3600;const clock=document.getElementById('clock');function drawClock(){clock.textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0')}function stop(){running=false;clearInterval(interval)}function tick(){remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));drawClock();if(remaining===0){stop();day().focus=(day().focus||0)+Math.round(sessionSeconds/60);save();update();document.getElementById('timerMsg').textContent='Session complete. Record what you verified.'}}document.getElementById('start').onclick=()=>{if(running)return;running=true;endAt=Date.now()+remaining*1000;interval=setInterval(tick,250);document.getElementById('timerMsg').textContent='One action at a time.'};document.getElementById('pause').onclick=()=>{if(running){tick();stop()}};function resetTimer(){stop();sessionSeconds=Number(document.getElementById('duration').value)*60;remaining=sessionSeconds;drawClock()}document.getElementById('reset').onclick=resetTimer;document.getElementById('duration').onchange=resetTimer;document.getElementById('restart').onclick=()=>{document.getElementById('duration').value='5';resetTimer();document.getElementById('start').click()};drawClock();
-const dims=[['delivery','Delivery reliability'],['understanding','Technical ownership'],['focus','Focus consistency'],['life','Life balance']];function renderRatings(){let w=state.weeks[weekKey()]||{},box=document.getElementById('ratings');box.innerHTML='';dims.forEach(([id,name])=>{let l=document.createElement('label');l.textContent=name;let sel=document.createElement('select');for(let n=1;n<=5;n++){let o=document.createElement('option');o.value=n;o.textContent=n+' / 5';sel.append(o)}sel.value=w[id]||3;sel.onchange=()=>{(state.weeks[weekKey()]??={})[id]=Number(sel.value);save()};l.append(sel);box.append(l)});['worked','friction','adjustment'].forEach(id=>{document.getElementById(id).value=w[id]||'';document.getElementById(id).oninput=e=>{(state.weeks[weekKey()]??={})[id]=e.target.value;save()}})}document.getElementById('saveWeek').onclick=()=>{(state.weeks[weekKey()]??={}).saved=true;save();alert('Weekly review saved')};function renderWeek(){let days=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=d.toLocaleDateString('en-CA');days.push({date:d,data:state.days[k]||{}})}document.getElementById('days').textContent=days.filter(x=>x.data.closed).length;document.getElementById('minutes').textContent=days.reduce((s,x)=>s+(x.data.focus||0),0);let max=Math.max(60,...days.map(x=>x.data.focus||0));document.getElementById('bars').innerHTML=days.map(x=>'<div class="bar" style="height:'+Math.max(3,Math.round((x.data.focus||0)/max*100))+'%" title="'+(x.data.focus||0)+' minutes"><span>'+x.date.toLocaleDateString(undefined,{weekday:'short'}).slice(0,2)+'</span></div>').join('');document.getElementById('weekSummary').textContent='Focus on consistency and verified outcomes, not streaks.'}document.getElementById('export').onclick=()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='momentum-backup-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};document.getElementById('import').onchange=async e=>{try{let s=JSON.parse(await e.target.files[0].text());if(!s||typeof s.days!=='object'||typeof s.weeks!=='object')throw Error('Invalid backup');if(confirm('Replace local data with this backup?')){state=s;save();refreshUI();alert('Backup imported. Wait until the status says Synced.')}}catch{alert('Could not import this backup')}};document.getElementById('clear').onclick=()=>{if(confirm('Permanently erase all your synced Momentum records?')){state={days:{},weeks:{}};save();refreshUI()}};
-boot().catch(err=>{document.getElementById('authMsg').textContent='Startup failed: '+err.message});
-window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f8f6">
+  <meta name="description" content="A quiet place to decide, do, and review what matters.">
+  <title>Momentum — Today</title>
+  <link rel="stylesheet" href="./styles.css?v=2">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="./app.js?v=2"></script>
+</head>
+<body>
+  <div id="boot" class="boot"><span class="wordmark">Momentum<span class="brand-dot">.</span></span><p>Opening your workspace…</p></div>
+  <section id="loginView" class="login-shell" hidden aria-labelledby="loginTitle">
+    <div class="login-card">
+      <div class="wordmark">Momentum<span class="brand-dot">.</span></div>
+      <h1 id="loginTitle">Welcome back.</h1>
+      <p class="subtle">A little clarity for the day ahead.</p>
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com" required>
+        <label for="password">Password</label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+          <button id="togglePassword" class="text-button" type="button" aria-label="Show password">Show</button>
+        </div>
+        <p class="form-error" id="loginError" role="alert" aria-live="polite"></p>
+        <button class="primary login-submit" id="loginSubmit" type="submit">Sign in</button>
+      </form>
+      <p class="login-footnote">No email link needed. You'll stay signed in on this device unless you sign out or your session expires.</p>
+    </div>
+  </section>
+
+  <div id="workspace" hidden>
+    <header class="topbar">
+      <div class="top-inner">
+        <div class="wordmark">Momentum<span class="brand-dot">.</span></div>
+        <div class="top-right">
+          <span id="syncStatus" class="sync-state" role="status" aria-live="polite">Connecting</span>
+          <button id="settingsButton" class="quiet-button settings-button" type="button">Settings</button>
+        </div>
+      </div>
+    </header>
+    <main class="shell" id="main">
+      <nav class="tabs" aria-label="Main navigation">
+        <button type="button" data-view="today" class="active" aria-current="page">Today</button>
+        <button type="button" data-view="week">Week</button>
+      </nav>
+
+      <section class="view" id="todayView" aria-labelledby="todayHeading">
+        <div class="page-intro">
+          <p class="eyebrow" id="dateLabel">Today</p>
+          <h1 id="todayHeading">Make today count.</h1>
+          <p class="subtle">One clear priority. The rest can follow.</p>
+        </div>
+
+        <section class="priority-panel" aria-label="Today's priority">
+          <div class="section-caption">
+            <span class="eyebrow">TODAY'S PRIORITY</span>
+            <label class="complete-label"><input type="checkbox" id="priorityDone"><span>Done</span></label>
+          </div>
+          <label class="sr-only" for="outcome">What is the most important thing today?</label>
+          <textarea id="outcome" rows="2" maxlength="500" placeholder="What's the one result that matters today?"></textarea>
+          <div class="next-step">
+            <label for="nextStep">First step</label>
+            <input id="nextStep" type="text" maxlength="300" placeholder="Something you can do in the next 5 minutes">
+          </div>
+          <details class="disclosure" id="definitionDisclosure">
+            <summary>Define what done looks like</summary>
+            <label class="sr-only" for="definition">Definition of done</label>
+            <textarea id="definition" rows="2" maxlength="1000" placeholder="How will you know it's actually finished?"></textarea>
+          </details>
+        </section>
+
+        <section class="content-section" aria-labelledby="otherHeading">
+          <div class="section-row"><h2 id="otherHeading">Also on your list</h2><span class="hint">Keep it light</span></div>
+          <div class="tasks" id="extraTasks"></div>
+          <button id="addTask" class="add-task" type="button">+ Add another task</button>
+        </section>
+
+        <section class="focus-panel" aria-labelledby="focusHeading">
+          <div class="focus-text">
+            <h2 id="focusHeading">Focus time</h2>
+            <p>Put the phone down. Work on the next step.</p>
+          </div>
+          <div class="focus-controls">
+            <select id="duration" aria-label="Focus session duration">
+              <option value="5">5 min</option>
+              <option value="25" selected>25 min</option>
+              <option value="50">50 min</option>
+            </select>
+            <span class="clock" id="clock" aria-live="off">25:00</span>
+            <button id="timerAction" class="primary" type="button">Start</button>
+            <button id="timerReset" class="quiet-button" type="button" aria-label="Reset focus timer" hidden>Reset</button>
+          </div>
+          <span class="focus-feedback" id="timerMessage" role="status" aria-live="polite"></span>
+        </section>
+
+        <details class="wrap-panel" id="wrapDisclosure">
+          <summary><span>Close out the day <small>Two minutes to leave work behind</small></span><span class="chevron" aria-hidden="true">⌄</span></summary>
+          <div class="wrap-fields">
+            <label for="evidence">What did you finish or verify?</label>
+            <textarea id="evidence" rows="2" maxlength="1600" placeholder="A result, not an hour count"></textarea>
+            <label for="next">Where will you start tomorrow?</label>
+            <input id="next" type="text" maxlength="400" placeholder="One clear first action">
+            <div class="wrap-footer"><button id="closeDay" type="button" class="secondary">Finish for today</button><span id="closedMessage" class="hint"></span></div>
+          </div>
+        </details>
+        <p class="bottom-note">You don't need a perfect day. You need a clear next step.</p>
+      </section>
+
+      <section class="view" id="weekView" aria-labelledby="weekHeading" hidden>
+        <div class="page-intro">
+          <p class="eyebrow">LAST SEVEN DAYS</p>
+          <h1 id="weekHeading">Your week, at a glance.</h1>
+          <p class="subtle">Look at what's moving, without scoring yourself.</p>
+        </div>
+        <div class="weekly-metrics">
+          <div><strong id="completedCount">0</strong><span>Priorities finished</span></div>
+          <div><strong id="focusTotal">0</strong><span>Minutes focused</span></div>
+          <div><strong id="reviewCount">0</strong><span>Days closed out</span></div>
+        </div>
+        <div class="history-list" id="history"></div>
+        <section class="reflection">
+          <label for="weeklyNote">One thing to make easier next week</label>
+          <textarea id="weeklyNote" rows="3" maxlength="1600" placeholder="What would make important work easier to start?"></textarea>
+          <span class="hint">Saved automatically</span>
+        </section>
+      </section>
+    </main>
+    <dialog id="settingsDialog" aria-labelledby="settingsTitle">
+      <div class="dialog-head"><h2 id="settingsTitle">Settings</h2><button id="closeSettings" class="quiet-button" type="button" aria-label="Close settings">Close</button></div>
+      <p class="subtle">Your data syncs privately through your Supabase account.</p>
+      <div class="setting-row"><span>Account</span><span id="accountEmail" class="account-email"></span></div>
+      <div class="setting-row"><span>Backup your data</span><button id="exportData" class="secondary" type="button">Download JSON</button></div>
+      <details class="restore-detail"><summary>Restore from a backup</summary><p class="hint">Replaces your saved data after confirmation.</p><input type="file" id="restoreData" accept=".json,application/json" aria-label="Select a JSON backup"></details>
+      <button id="signOut" class="signout-link" type="button">Sign out</button>
+    </dialog>
+  </div>
+</body>
+</html>
