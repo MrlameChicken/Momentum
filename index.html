@@ -28,7 +28,7 @@
         <p class="form-error" id="loginError" role="alert" aria-live="polite"></p>
         <button class="primary login-submit" id="loginSubmit" type="submit">Sign in</button>
       </form>
-      <p class="login-footnote">No email link needed. You'll stay signed in on this device unless you sign out or your session expires.</p>
+      <p class="login-footnote">This browser will remember your sign-in.</p>
     </div>
   </section>
 
@@ -98,7 +98,7 @@
         </section>
 
         <details class="wrap-panel" id="wrapDisclosure">
-          <summary><span>Close out the day <small>Two minutes to leave work behind</small></span><span class="chevron" aria-hidden="true">⌄</span></summary>
+          <summary><span>Close out the day <small>Note progress and tomorrow's first step</small></span><span class="chevron" aria-hidden="true">⌄</span></summary>
           <div class="wrap-fields">
             <label for="evidence">What did you finish or verify?</label>
             <textarea id="evidence" rows="2" maxlength="1600" placeholder="A result, not an hour count"></textarea>
@@ -112,14 +112,14 @@
 
       <section class="view" id="weekView" aria-labelledby="weekHeading" hidden>
         <div class="page-intro">
-          <p class="eyebrow">LAST SEVEN DAYS</p>
-          <h1 id="weekHeading">This week</h1>
-          <p class="subtle">What got finished over the past seven days.</p>
+          <p class="eyebrow">RECENT ACTIVITY</p>
+          <h1 id="weekHeading">Past 7 days</h1>
+          <p class="subtle">A simple record of what got done.</p>
         </div>
         <div class="weekly-metrics">
           <div><strong id="completedCount">0</strong><span>Priorities finished</span></div>
           <div><strong id="focusTotal">0</strong><span>Minutes focused</span></div>
-          <div><strong id="reviewCount">0</strong><span>Days closed out</span></div>
+          <div><strong id="reviewCount">0</strong><span>Days reviewed</span></div>
         </div>
         <div class="history-list" id="history"></div>
         <section class="reflection">
