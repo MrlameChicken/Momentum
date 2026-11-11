@@ -1,48 +1,72 @@
-# Momentum — Personal Execution System
+# Momentum
 
-**Published site (after GitHub Pages is enabled):** https://mrlamechicken.github.io/Momentum/
+A deliberately small, mobile-friendly workspace for choosing what matters, doing it, and leaving work behind.
 
+**Open the app:** https://mrlamechicken.github.io/Momentum/
 
-## Important: not deployed yet
+## What changed
 
-The website's **code is public** on GitHub Pages. Your records are stored in Supabase with row-level security. Do not put private data or secrets in GitHub files.
+- **Today:** one priority, a concrete next step, and an optional definition of done.
+- **Also on your list:** add up to three secondary tasks only when needed.
+- **Focus:** a small 5/25/50-minute timer.
+- **Close out the day:** optional evidence of progress and tomorrow's first step.
+- **Week:** seven-day history, completed priorities, focus minutes, and a single reflection.
+- **Settings:** backup/restore and sign-out, away from the primary workflow.
+- **Sign-in:** email **and password** instead of sending an email link every time. Your browser keeps the session for return visits.
 
-## 1. Database
+The visual design intentionally has no streaks, scores, confetti, large charts, coaching speeches, or compulsory multi-step rituals. It draws on patterns in well-established task apps and on progressive disclosure in interaction design.
 
-Supabase → SQL Editor → New query → paste and run `supabase-setup.sql`.
+## One-time Supabase setup
 
-## 2. Authorize only your account
+The app uses Supabase project `ihtcxdlcgpqajrtodpqa` and database table `public.momentum_data`.
 
-Supabase → Authentication → Users → Add user → Create new user (enter your own email and set a strong temporary password, or use invitation if available). Confirm the user appears. Then go to Authentication → Providers → Email and **disable Allow new users to sign up** (the wording may vary; sometimes Authentication → Settings → User Signups). Keep email OTP/magic-link sign-in enabled. Do not share the temporary password. An existing authorized user can receive sign-in links with `shouldCreateUser: false`.
+1. **Database:** In Supabase SQL Editor, run `supabase-setup.sql` if you have not already. It enables row-level security (RLS) and grants authenticated users access **only to their own records**.
+2. **Create/confirm your account:** Under Authentication → Users, make sure your own email account exists, is *confirmed*, and **has a password set**. The simplest no-email route for a new account is **Add user → Create new user**, set a strong unique password, and use **Auto Confirm User**.
+3. **If you already have an unconfirmed invitation:** A pending invitation alone does not necessarily establish a password. Do **not** delete an account with existing records. If there are no records for that user, you can remove the unconfirmed invitation account and then use **Create new user** instead. If it already has data, preserve the user ID and use a supported Supabase account recovery/admin flow rather than deleting the user.
+4. **Restrict access:** Authentication → Providers / Sign In → disable **Allow new users to sign up** and disable anonymous sign-ins. Leave Email authentication and password sign-in enabled.
+5. **GitHub Pages:** Repository Settings → Pages → **Deploy from a branch**, branch **main**, folder **/(root)**.
+6. **URL Configuration:** Set Site URL to `https://mrlamechicken.github.io/Momentum/`. This is no longer needed for daily password login, but keep it correct for future account recovery.
 
-For stronger exclusivity, optionally configure an additional restrictive database policy keyed to your auth user ID; the existing RLS isolates users from each other, but does not by itself prevent other accounts from having their own records.
+## Day-to-day usage
 
-## 3. Publish
+Open the site on phone or laptop. On the first visit, enter your existing Supabase user's email and password. Later visits on the same browser typically reopen the workspace automatically; manually signing out or clearing browser storage requires signing in again.
 
-Create a **new personal** GitHub repository named `Momentum` (public is fine: no private records are committed). Upload `index.html` to the repository root. GitHub → Settings → Pages → Build and deployment → Deploy from a branch → main → /(root) → Save. GitHub Pages cannot make this website itself private. The app is behind a sign-in screen, but public users can download its HTML/JS.
+Type the **one result** that matters today. Write the **first step** in plain language. Use `Also on your list` only if needed. Mark the priority done only after verifying the result. At the end of your day, optionally note evidence and the first move for tomorrow.
 
-## 4. Redirect URL
+The app **autosaves to Supabase**. Wait for **Saved** in the header before leaving. A network connection is required to save.
 
-Supabase → Authentication → URL Configuration: Site URL and Redirect URLs should include `https://mrlamechicken.github.io/Momentum/` (exact deployed URL). Email link redirects require this allowlist. You may also include your local development URL for testing.
+On Android Chrome, use the browser's menu → **Add to Home screen** to create a convenient shortcut.
 
-## 5. Verify before using
+## Privacy and security
 
-- Open site in incognito: dashboard should be inaccessible without login.
-- Sign in using your authorized email and create a harmless test entry; confirm status `Synced ✓`.
-- Open on another browser/device and sign in; verify same test entry appears.
-- Log out; dashboard should be hidden.
-- Supabase → Table Editor → momentum_data: verify only your user ID owns the row.
-- Try another email: should not create a new user or expose your records.
-- Keep backups; free Supabase projects can be paused after inactivity and free plans have limits.
+- The website files are **publicly readable** on GitHub Pages, including the Supabase **publishable** key and project URL. This is expected for browser applications.
+- **Personal records** live in Supabase, protected by authenticated access and RLS based on `auth.uid()`. Never turn off RLS or add an unfiltered public read policy.
+- **Do not** put your account password, Supabase service-role/secret key, or personal notes into repository files. Passwords are submitted only to Supabase Authentication via HTTPS; the app does not store them itself.
+- Signups should stay disabled, preventing additional self-registered accounts. RLS still ensures that an authorized account cannot read someone else's data.
+- Cloud-hosted data is **not end-to-end encrypted**. Avoid storing confidential employer information.
+- Use a **strong unique password**; if you shared one in chat or elsewhere, rotate it.
 
-## Security notes
+## Data compatibility and backups
 
-The publishable key and project URL are intentionally included in browser code; they are not secret. **Never put service_role keys, secret keys, or database passwords into frontend code.** RLS is the actual data boundary. Cloud data is not end-to-end encrypted. Do not use the app to store sensitive company information.
+Momentum keeps using the existing Supabase JSON payload with `days` and `weeks` maps. Earlier priority, definition, focus, evidence, next-day notes, and close-out status remain intact. The old `deliver`, `understand`, and `advance` fields are migrated to optional secondary tasks. Legacy fields remain in the saved JSON.
 
-## Local data migration
+Settings → **Download JSON** gives you a backup. The restore control is behind a disclosure and asks before replacing your saved data.
 
-If you have entries in the original offline version, export JSON there and import using the Backup tab of the new version. The new version does not silently upload existing local entries.
+## Limitations and smoke checks
 
-## Known limitations
+- The app uses one JSON row per user, so **editing on multiple devices simultaneously may overwrite changes**. Use one active device at a time.
+- Offline edits are not guaranteed to persist. Watch for the **Saved** status.
+- Supabase free projects can pause after inactivity.
+- On a new browser: verify you see only the password form; no tasks are visible without login.
+- Sign in, create a harmless test priority, wait for **Saved**, and confirm it appears on a second device signed into the same account.
+- Sign out and confirm the private workspace disappears.
+- GitHub Pages deployment must be enabled by the repo owner; the connector cannot toggle Pages settings.
 
-The app syncs a single JSON record for one user. Simultaneous editing on multiple devices may cause last-write-wins overwrites; avoid editing on both at once. The client needs an internet connection to save. This version is not an offline-first PWA. The app uses a CDN for Supabase JS, so it needs network access.
+## Source
+
+The app is plain HTML, CSS, and JavaScript. No build system or framework is necessary for this small use case.
+
+- `index.html` — semantic interface
+- `styles.css` — responsive design
+- `app.js` — behavior, authentication, synchronization
+- `supabase-setup.sql` — database schema and privacy policies
