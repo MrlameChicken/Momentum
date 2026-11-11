@@ -270,7 +270,7 @@
     if(remaining===0) {
       stopTimer();
       todayData().focus=(Number(todayData().focus)||0)+Math.round(timerLength/60);
-      $("timerMessage").textContent="Session finished. Nice — note what moved forward.";
+      $("timerMessage").textContent="Focus session complete.";
       markEdited();remaining=timerLength;
     }
     drawTimer();
