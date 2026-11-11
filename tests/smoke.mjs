@@ -7,8 +7,8 @@ assert.equal(new Set(ids).size,ids.length,'DOM IDs must be unique');
 for(const [,id] of js.matchAll(/\$\("([^"]+)"\)/g)){
   assert.ok(ids.includes(id),'Missing DOM element: '+id);
 }
-assert.match(html,/<script defer src="\.\/app\.js\?v=2"><\/script>/);
-assert.match(html,/<link rel="stylesheet" href="\.\/styles\.css\?v=2">/);
+assert.match(html,/<script defer src="\.\/app\.js\?v=3"><\/script>/);
+assert.match(html,/<link rel="stylesheet" href="\.\/styles\.css\?v=3">/);
 assert.match(html,/<input id="password"[^>]*type="password"/);
 assert.match(js,/signInWithPassword/);
 assert.match(js,/persistSession:true/);
