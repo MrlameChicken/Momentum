@@ -140,11 +140,11 @@
       const date=document.createElement("span");date.className="history-date";
       date.textContent=item.date.toLocaleDateString(undefined,{weekday:"short",day:"numeric"});
       const title=document.createElement("span");title.className="history-title";
-      title.textContent=item.day.outcome || "Nothing planned";
+      title.textContent=item.day.outcome || "No entry";
       if(!item.day.outcome)title.classList.add("empty");
       const status=document.createElement("span");status.className="history-status";
       if(item.day.priorityDone){status.textContent="Done";status.classList.add("complete")}
-      else if(item.day.outcome){status.textContent="Not marked"}
+      else if(item.day.outcome){status.textContent="Open"}
       else status.textContent="—";
       row.append(date,title,status);return row;
     });
