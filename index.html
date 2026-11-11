@@ -16,7 +16,7 @@
     <div class="login-card">
       <div class="wordmark">Momentum<span class="brand-dot">.</span></div>
       <h1 id="loginTitle">Welcome back.</h1>
-      <p class="subtle">A little clarity for the day ahead.</p>
+      <p class="subtle">Sign in to continue where you left off.</p>
       <form id="loginForm">
         <label for="email">Email</label>
         <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com" required>
@@ -51,8 +51,8 @@
       <section class="view" id="todayView" aria-labelledby="todayHeading">
         <div class="page-intro">
           <p class="eyebrow" id="dateLabel">Today</p>
-          <h1 id="todayHeading">Make today count.</h1>
-          <p class="subtle">One clear priority. The rest can follow.</p>
+          <h1 id="todayHeading">Today</h1>
+          <p class="subtle">Choose one important result to finish.</p>
         </div>
 
         <section class="priority-panel" aria-label="Today's priority">
@@ -74,7 +74,7 @@
         </section>
 
         <section class="content-section" aria-labelledby="otherHeading">
-          <div class="section-row"><h2 id="otherHeading">Also on your list</h2><span class="hint">Keep it light</span></div>
+          <div class="section-row"><h2 id="otherHeading">Also on your list</h2><span class="hint">Optional</span></div>
           <div class="tasks" id="extraTasks"></div>
           <button id="addTask" class="add-task" type="button">+ Add another task</button>
         </section>
@@ -82,7 +82,7 @@
         <section class="focus-panel" aria-labelledby="focusHeading">
           <div class="focus-text">
             <h2 id="focusHeading">Focus time</h2>
-            <p>Put the phone down. Work on the next step.</p>
+            <p>Work on the next step.</p>
           </div>
           <div class="focus-controls">
             <select id="duration" aria-label="Focus session duration">
@@ -107,14 +107,14 @@
             <div class="wrap-footer"><button id="closeDay" type="button" class="secondary">Finish for today</button><span id="closedMessage" class="hint"></span></div>
           </div>
         </details>
-        <p class="bottom-note">You don't need a perfect day. You need a clear next step.</p>
+        
       </section>
 
       <section class="view" id="weekView" aria-labelledby="weekHeading" hidden>
         <div class="page-intro">
           <p class="eyebrow">LAST SEVEN DAYS</p>
-          <h1 id="weekHeading">Your week, at a glance.</h1>
-          <p class="subtle">Look at what's moving, without scoring yourself.</p>
+          <h1 id="weekHeading">This week</h1>
+          <p class="subtle">What got finished over the past seven days.</p>
         </div>
         <div class="weekly-metrics">
           <div><strong id="completedCount">0</strong><span>Priorities finished</span></div>
